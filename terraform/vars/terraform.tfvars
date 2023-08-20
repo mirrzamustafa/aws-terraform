@@ -1,0 +1,5 @@
+ssh_key           = "tf-key-pair"
+app_bucket_name   = "mirza-web-app-storage"
+ami               = "ami-05548f9cecf47b442"
+instance_type     = "t2.micro"
+aws_region        = "us-east-1"
