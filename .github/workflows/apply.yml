@@ -1,0 +1,56 @@
+name: Terraform Plan
+
+on: 
+  push:
+    branches: [main] #runs when a pull request is merged to main branch
+
+env:
+  AWS_REGION:  ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+  RDS_USER: ${{ secrets.RDS_USER }}
+
+jobs: 
+  apply-develop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+      
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform/
+      
+      - name: Terraform apply
+        run: ci/plan_apply.sh dev apply
+
+  apply-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+      
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform/
+      
+      - name: Terraform apply
+        run: ci/plan_apply.sh stage apply
+        
+  apply-prod:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps: 
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+      
+      - name: Terraform init
+        run: terraform init
+        working-directory: terraform/
+      
+      - name: Terraform apply
+        run: ci/plan_apply.sh prod apply
+
